@@ -1,12 +1,17 @@
 {
   "name": "remix-upstash-session",
   "version": "0.0.1",
-  "description": "",
+  "description": "A super simple library to use uptash redis for remix sessions",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myleslinder/remix-upstash-session"
+  },
+  "homepage": "https://github.com/myleslinder/remix-upstash-session",
   "scripts": {
     "build": "tsup",
     "format": "prettier --write .",
