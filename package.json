@@ -1,0 +1,34 @@
+{
+  "name": "remix-upstash-session",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "format": "prettier --write .",
+    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
+    "typecheck": "tsc -b",
+    "preversion": "pnpm run build"
+  },
+  "dependencies": {
+    "@lukeed/csprng": "^1.0.1"
+  },
+  "devDependencies": {
+    "prettier": "2.7.1",
+    "tsup": "^6.2.3",
+    "typescript": "^4.8.2",
+    "@remix-run/server-runtime": "*",
+    "@upstash/redis": "*"
+  },
+  "peerDependencies": {
+    "@remix-run/server-runtime": "*",
+    "@upstash/redis": "*"
+  },
+  "keywords": [],
+  "author": "Myles Linder",
+  "license": "MIT"
+}
