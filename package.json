@@ -28,6 +28,13 @@
     "typecheck": "tsc -b",
     "prepublishOnly": "pnpm run build"
   },
+  "tsup": {
+    "entry": [
+      "src/index.ts"
+    ],
+    "splitting": false,
+    "sourcemap": false
+  },
   "dependencies": {
     "@lukeed/csprng": "^1.0.1"
   },
