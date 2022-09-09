@@ -39,6 +39,13 @@ type UpstashSessionStorageOptions = {
    * @default _session:
    */
   keyPrefix?: string;
+  /**
+   * Forces a session that is "uninitialized" to be saved to the store.
+   * A session is uninitialized when it is new but not modified.
+   *
+   * @default false
+   */
+  saveUninitialized?: boolean;
 };
 
 /**
@@ -51,6 +58,7 @@ export function createUpstashSessionStorage({
   keyPrefix = "_session:",
   redis,
   createSessionStorage,
+  saveUninitialized = false,
 }: UpstashSessionStorageOptions) {
   if (!redis) {
     throw new Error("Need to provide an upstash redis client instance");
@@ -64,7 +72,11 @@ export function createUpstashSessionStorage({
     cookie,
     async createData(data, expires) {
       const id = createId();
-      await setData(redis, { key: buildKey(id), data, expires });
+
+      if (Object.keys(data).length !== 0 || saveUninitialized) {
+        await setData(redis, { key: buildKey(id), data, expires });
+      }
+
       return id;
     },
     async readData(id) {
