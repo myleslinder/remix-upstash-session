@@ -55,9 +55,9 @@ type UpstashSessionStorageOptions = {
  */
 export function createUpstashSessionStorage({
   cookie,
-  keyPrefix = "_session:",
   redis,
   createSessionStorage,
+  keyPrefix = "_session:",
   saveUninitialized = false,
 }: UpstashSessionStorageOptions) {
   if (!redis) {

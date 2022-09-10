@@ -11,8 +11,14 @@ describe(createUpstashSessionStorage.name, () => {
 
   test("Should throw without redis or createSessionFunction", async () => {
     try {
+      const sessionExpirationTime = 60 * 60 * 24 * 30;
       createUpstashSessionStorage({
-        cookie: { name: "session", secrets: ["s3cr3ts"], path: "/" },
+        cookie: {
+          name: "session",
+          secrets: ["s3cr3ts"],
+          path: "/",
+          maxAge: sessionExpirationTime,
+        },
         //@ts-expect-error intentional
         redis: undefined,
         //@ts-expect-error intentional
@@ -57,6 +63,59 @@ describe(createUpstashSessionStorage.name, () => {
     expect(newSession.id).not.toBeUndefined();
     expect(newSession.id).not.toEqual("");
     expect(newSession.get("val")).toEqual("something");
+  });
+  test("Should set expiry as TTL if exists", async () => {
+    const sessionExpirationTime = 60 * 60 * 24 * 30;
+    const redis = new Redis({ url: "", token: "" });
+    const keyPrefix = "prefix";
+    const sessionStorage = createUpstashSessionStorage({
+      cookie: {
+        name: "session",
+        secrets: ["s3cr3ts"],
+        path: "/",
+        maxAge: sessionExpirationTime,
+      },
+      redis,
+      keyPrefix,
+      createSessionStorage,
+    });
+    const session = await sessionStorage.getSession();
+    expect(session.id).toEqual("");
+
+    expect(redis.set).not.toHaveBeenCalled();
+
+    session.set("val", "something");
+    const header = await sessionStorage.commitSession(session);
+    expect(redis.set).toHaveBeenCalledOnce();
+    const newSession = await sessionStorage.getSession(header);
+    expect(newSession.id).not.toBeUndefined();
+    expect(newSession.id).not.toEqual("");
+    expect(newSession.get("val")).toEqual("something");
+    expect(redis.ttl(`${keyPrefix}${newSession.id}`)).toEqual(
+      sessionExpirationTime
+    );
+  });
+  test("Should not set TTL if no expiry", async () => {
+    const redis = new Redis({ url: "", token: "" });
+    const keyPrefix = "prefix";
+    const sessionStorage = createUpstashSessionStorage({
+      redis,
+      keyPrefix,
+      createSessionStorage,
+    });
+    const session = await sessionStorage.getSession();
+    expect(session.id).toEqual("");
+
+    expect(redis.set).not.toHaveBeenCalled();
+
+    session.set("val", "something");
+    const header = await sessionStorage.commitSession(session);
+    expect(redis.set).toHaveBeenCalledOnce();
+    const newSession = await sessionStorage.getSession(header);
+    expect(newSession.id).not.toBeUndefined();
+    expect(newSession.id).not.toEqual("");
+    expect(newSession.get("val")).toEqual("something");
+    expect(redis.ttl(`${keyPrefix}${newSession.id}`)).toEqual(-1);
   });
 
   test("Should set and retrieve the session", async () => {
