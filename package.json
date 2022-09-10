@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "@myleslinder/eslint-config": "^0.0.31",
+    "@myleslinder/prettier-config": "^0.0.1",
     "@remix-run/node": "^1.7.0",
     "@remix-run/server-runtime": "*",
     "@typescript-eslint/eslint-plugin": "^5.36.2",

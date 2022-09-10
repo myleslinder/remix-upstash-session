@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@lukeed/csprng': ^1.0.1
   '@myleslinder/eslint-config': ^0.0.31
+  '@myleslinder/prettier-config': ^0.0.1
   '@remix-run/node': ^1.7.0
   '@remix-run/server-runtime': '*'
   '@typescript-eslint/eslint-plugin': ^5.36.2
@@ -23,6 +24,7 @@ dependencies:
 
 devDependencies:
   '@myleslinder/eslint-config': 0.0.31_hcwq2zvsdjwirs24x4cjiftf44
+  '@myleslinder/prettier-config': 0.0.1
   '@remix-run/node': 1.7.0_biqbaboplfbrettd7655fr4n2y
   '@remix-run/server-runtime': 1.7.0_biqbaboplfbrettd7655fr4n2y
   '@typescript-eslint/eslint-plugin': 5.36.2_2l2r3i3lm6jysqd4ac3ql4n2mm
@@ -464,6 +466,10 @@ packages:
       - react
       - react-dom
       - supports-color
+    dev: true
+
+  /@myleslinder/prettier-config/0.0.1:
+    resolution: {integrity: sha512-3noVBQ3i9vAl/dDRg58ZeK5Ce+08htwZUUDYf6/Ayiy2Ldy0Z/M4HfhuxCJde5RTc5WGQOlUziM/gCdDnn/duQ==}
     dev: true
 
   /@nodelib/fs.scandir/2.1.5:
