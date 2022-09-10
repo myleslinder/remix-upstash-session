@@ -97,7 +97,7 @@ export function createUpstashSessionStorage({
   });
 }
 
-export type SetDataArgs = {
+type SetDataArgs = {
   key: string;
   data: SessionData;
   expires?: Date;
