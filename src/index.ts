@@ -97,14 +97,12 @@ export function createUpstashSessionStorage({
   });
 }
 
-async function setData(
-  redis: Redis,
-  {
-    key,
-    data,
-    expires,
-  }: { key: string; data: SessionData; expires: Date | undefined }
-) {
+export type SetDataArgs = {
+  key: string;
+  data: SessionData;
+  expires?: Date;
+};
+async function setData(redis: Redis, { key, data, expires }: SetDataArgs) {
   const expInSeconds = expiresToSeconds(expires);
   return redis.set(
     key,
