@@ -1,3 +1,4 @@
 {
-  "explorer.fileNesting.enabled": true
+  "explorer.fileNesting.enabled": true,
+  "vite.autoStart": false
 }

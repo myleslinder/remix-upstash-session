@@ -1,4 +1,4 @@
-# Remix Upstash Session
+# Remix Upstash Session &nbsp;![](https://img.shields.io/npm/v/remix-upstash-session.svg)
 
 A super simple library to use uptash redis for remix sessions.
 
