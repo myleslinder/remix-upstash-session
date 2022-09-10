@@ -3,6 +3,7 @@ import type {
   CreateSessionStorageFunction,
   SessionData,
   SessionIdStorageStrategy,
+  SessionStorage,
 } from "@remix-run/server-runtime";
 import type { Redis } from "@upstash/redis";
 
@@ -59,7 +60,7 @@ export function createUpstashSessionStorage({
   createSessionStorage,
   keyPrefix = "_session:",
   saveUninitialized = false,
-}: UpstashSessionStorageOptions) {
+}: UpstashSessionStorageOptions): SessionStorage {
   if (!redis) {
     throw new Error("Need to provide an upstash redis client instance");
   }
