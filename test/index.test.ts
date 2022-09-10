@@ -9,7 +9,7 @@ describe(createUpstashSessionStorage.name, () => {
     vi.resetAllMocks();
   });
 
-  test("Should throw without redis or createSessionFunction", async () => {
+  test("Should throw without redis or createSessionFunction", () => {
     try {
       const sessionExpirationTime = 60 * 60 * 24 * 30;
       createUpstashSessionStorage({

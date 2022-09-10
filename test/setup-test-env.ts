@@ -15,12 +15,14 @@ vi.mock("@upstash/redis", () => {
           storage[key] = data;
 
           //@ts-expect-error intentiona
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           expiryMap[key] = opts?.ex ?? -1;
 
           return data;
         }
       );
       get = vi.fn((key: string) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return JSON.parse(storage[key] ?? "{}");
       });
       del = vi.fn((key: string) => {
