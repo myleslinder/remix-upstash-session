@@ -7,6 +7,8 @@ import type {
 } from "@remix-run/server-runtime";
 import type { Redis } from "@upstash/redis";
 
+type PickIdFn = (sessionData: SessionData) => string | undefined;
+
 type UpstashSessionStorageOptions = {
 	/**
 	 * An instance of the `@upstash/redis` client
@@ -42,17 +44,6 @@ type UpstashSessionStorageOptions = {
 	keyPrefix?: string;
 
 	/**
-	 * If you want to store all session ids
-	 * for a given user in a list to be able to
-	 * retrieve them all later provide this function which
-	 * will be called to pick the userId off the SessionData object.
-	 * Returning null or undefined will not cause the session
-	 * id to be saved in any list.
-	 *
-	 * @default "() => null"
-	 */
-	getUserId?: (sessionData: SessionData) => string | undefined | null;
-	/**
 	 * If you provided a value for `getUserId` then this optoin
 	 * sets the prefix of the keys used to store the session id lists.
 	 * This should end with the key separator you normally use e.g. `:`
@@ -72,24 +63,42 @@ type UpstashSessionStorageOptions = {
 	saveUninitialized?: boolean;
 };
 
-type UpstashSessionStorage = {
-	getSessions: (userId: string) => Promise<SessionData[]>;
-} & SessionStorage;
+type GetAllSessions = (userId: string) => Promise<SessionData[]>;
+type WithAugmentation = SessionStorage & { getAllSessions: GetAllSessions };
+
+/**
+ * If you want to store all session ids
+ * for a given user in a list to be able to
+ * retrieve them all later provide this function which
+ * will be called to pick the userId off the SessionData object.
+ * Returning null or undefined will not cause the session
+ * id to be saved in any list.
+ */
+//  pickUserId?: PickIdFn | NoOp;
 
 /**
  * Creates a SessionStorage that stores session data on in Upstash redis.
  * Uses key/value not hash because hash can't use TTL.
  * @see https://remix.run/docs/en/v1/api/remix#createsessionstorage
  */
-export function createUpstashSessionStorage({
-	cookie,
-	redis,
-	createSessionStorage,
-	keyPrefix = "_session:",
-	getUserId = () => undefined,
-	deviceKeyPrefix = "_device:",
-	saveUninitialized = false,
-}: UpstashSessionStorageOptions): UpstashSessionStorage {
+export function createUpstashSessionStorage(
+	options: UpstashSessionStorageOptions,
+): SessionStorage;
+export function createUpstashSessionStorage(
+	options: UpstashSessionStorageOptions,
+	pickUserId: PickIdFn,
+): SessionStorage & { getAllSessions: GetAllSessions };
+export function createUpstashSessionStorage(
+	{
+		cookie,
+		redis,
+		createSessionStorage,
+		keyPrefix = "_session:",
+		deviceKeyPrefix = "_device:",
+		saveUninitialized = false,
+	}: UpstashSessionStorageOptions,
+	pickUserId?: PickIdFn,
+): SessionStorage | WithAugmentation {
 	if (!redis) {
 		throw new Error("Need to provide an upstash redis client instance");
 	}
@@ -106,7 +115,7 @@ export function createUpstashSessionStorage({
 
 			if (Object.keys(data).length !== 0 || saveUninitialized) {
 				await setData(redis, { key: buildKey(id), data, expires });
-				const userId = getUserId(data);
+				const userId = pickUserId?.(data);
 				if (userId) {
 					await redis.lpush(buildDeviceKey(userId), id);
 				}
@@ -128,7 +137,7 @@ export function createUpstashSessionStorage({
 		},
 		async deleteData(id) {
 			const data = await redis.get<SessionData>(buildKey(id));
-			const userId = data ? getUserId(data) : null;
+			const userId = data ? pickUserId?.(data) : null;
 			if (userId) {
 				await redis.lrem(buildDeviceKey(userId), 0, id);
 			}
@@ -136,16 +145,19 @@ export function createUpstashSessionStorage({
 		},
 	});
 
-	return {
-		getSessions: async (userId) => {
-			const sessionIds = await redis.lrange(buildDeviceKey(userId), 0, -1);
-			const data = await Promise.all(
-				sessionIds.map((id) => redis.get<SessionData>(buildKey(id))),
-			);
-			return data.filter(isSessionData);
-		},
-		...sessionStorage,
-	};
+	if (pickUserId) {
+		return {
+			...sessionStorage,
+			getAllSessions: async (userId: string) => {
+				const sessionIds = await redis.lrange(buildDeviceKey(userId), 0, -1);
+				const data = await Promise.all(
+					sessionIds.map((id) => redis.get<SessionData>(buildKey(id))),
+				);
+				return data.filter(isSessionData);
+			},
+		};
+	}
+	return sessionStorage;
 }
 
 type SetDataArgs = {

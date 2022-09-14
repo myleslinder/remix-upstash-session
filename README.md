@@ -14,50 +14,81 @@ It also uses [`@lukeed/csprng`](https://github.com/lukeed/csprng) to generate ra
 
 Offers a `saveUninitialized` option (defaults to false) that forces a session that is "uninitialized" to be saved to the store. A session is uninitialized when it is new but not modified.
 
+Extends the session storage interface to offer a `getAllSessions` function to retrieve all sessions by a user id. To use this you need to provide a `pickUserId` function (to pick the user id off the session data) as the final parameter to `createUpstashSessionStorage`.
+
 ## Options
 
 ```ts
 type UpstashSessionStorageOptions = {
-  /**
-   * An instance of the `@upstash/redis` client
-   * @see https://docs.upstash.com/redis/sdks/javascriptsdk/getstarted
-   */
-  redis: Redis;
+	/**
+	 * An instance of the `@upstash/redis` client
+	 * @see https://docs.upstash.com/redis/sdks/javascriptsdk/getstarted
+	 */
+	redis: Redis;
 
-  /**
-   * A remix `createSessionStorage` function, you pass this in
-   * so that you can import it from the appropriate package,
-   * e.g. from @remix-run/node or cloudflare or deno
-   * @see https://remix.run/docs/en/v1/api/remix#createsessionstorage
-   */
-  createSessionStorage: CreateSessionStorageFunction;
+	/**
+	 * A remix `createSessionStorage` function, you pass this in
+	 * so that you can import it from the appropriate package,
+	 * e.g. from @remix-run/node or cloudflare or deno
+	 * @see https://remix.run/docs/en/v1/api/remix#createsessionstorage
+	 */
+	createSessionStorage: CreateSessionStorageFunction;
 
-  /**
-   * The cookie used to store the session data on the client, or options used
-   * to automatically create one. The expires from the cookie is what is provided
-   * as the expires to the create and update data calls.
-   * @see https://remix.run/docs/en/v1/api/remix#cookies
-   */
-  cookie?: SessionIdStorageStrategy["cookie"];
+	/**
+	 * The cookie used to store the session data on the client, or options used
+	 * to automatically create one. The expires from the cookie is what is provided
+	 * as the expires to the create and update data calls.
+	 * @see https://remix.run/docs/en/v1/api/remix#cookies
+	 */
+	cookie?: SessionIdStorageStrategy["cookie"];
 
-  /**
-   * The prefix to attach to the key when stored in redis.
-   * This should end with the key separator you normally use e.g. `:`
-   *
-   * Be careful with changing this value as
-   * it will effectively invalidate all existing sessions
-   *
-   * @default _session:
-   */
-  keyPrefix?: string;
-  /**
-   * Forces a session that is "uninitialized" to be saved to the store.
-   * A session is uninitialized when it is new but not modified.
-   *
-   * @default false
-   */
-  saveUninitialized?: boolean;
+	/**
+	 * The prefix to attach to the key when stored in redis.
+	 * This should end with the key separator you normally use e.g. `:`
+	 *
+	 * Be careful with changing this value as
+	 * it will effectively invalidate all existing sessions
+	 *
+	 * @default _session:
+	 */
+	keyPrefix?: string;
+	/**
+	 * If you provided a value for `getUserId` then this optoin
+	 * sets the prefix of the keys used to store the session id lists.
+	 * This should end with the key separator you normally use e.g. `:`
+	 *
+	 * Be careful with changing this value as
+	 * it will eliminate your ability to retrieve previous session lists
+	 *
+	 * @default _device:
+	 */
+	deviceKeyPrefix?: string;
+	/**
+	 * Forces a session that is "uninitialized" to be saved to the store.
+	 * A session is uninitialized when it is new but not modified.
+	 *
+	 * @default false
+	 */
+	/**
+	 * Forces a session that is "uninitialized" to be saved to the store.
+	 * A session is uninitialized when it is new but not modified.
+	 *
+	 * @default false
+	 */
+	saveUninitialized?: boolean;
 };
+```
+
+```ts
+/**
+ * If you want to store all session ids
+ * for a given user in a list to be able to
+ * retrieve them all later provide this function which
+ * will be called to pick the userId off the SessionData object.
+ * Returning null or undefined will not cause the session
+ * id to be saved in any list.
+ */
+pickUserId?: (sessionData: SessionData) => string | undefined;
 ```
 
 ## License
