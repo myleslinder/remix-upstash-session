@@ -1,78 +1,78 @@
 {
-  "name": "remix-upstash-session",
-  "version": "0.0.2",
-  "description": "A super simple library to use uptash redis for remix sessions",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs"
-    }
-  },
-  "packageManager": "pnpm@7.11.0",
-  "sideEffects": false,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/myleslinder/remix-upstash-session"
-  },
-  "homepage": "https://github.com/myleslinder/remix-upstash-session",
-  "scripts": {
-    "build": "tsup",
-    "format": "prettier --write .",
-    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
-    "typecheck": "tsc -b",
-    "test": "vitest",
-    "update:check": "pnpm dlx taze",
-    "v:patch": "npm version patch",
-    "prepublishOnly": "pnpm run build"
-  },
-  "tsup": {
-    "entry": [
-      "src/index.ts"
-    ],
-    "splitting": false,
-    "sourcemap": false
-  },
-  "dependencies": {
-    "@lukeed/csprng": "^1.0.1"
-  },
-  "devDependencies": {
-    "@myleslinder/eslint-config": "^0.0.31",
-    "@myleslinder/prettier-config": "^0.0.1",
-    "@remix-run/node": "^1.7.0",
-    "@remix-run/server-runtime": "*",
-    "@typescript-eslint/eslint-plugin": "^5.36.2",
-    "@typescript-eslint/parser": "^5.36.2",
-    "@upstash/redis": "*",
-    "eslint": "^8.23.0",
-    "eslint-config-prettier": "^8.5.0",
-    "prettier": "2.7.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "tsup": "^6.2.3",
-    "typescript": "^4.8.3",
-    "vite": "^3.1.0",
-    "vitest": "^0.22.1"
-  },
-  "peerDependencies": {
-    "@remix-run/server-runtime": "*",
-    "@upstash/redis": "*"
-  },
-  "pnpm": {
-    "peerDependencyRules": {
-      "allowedVersions": {
-        "react": "18",
-        "typescript": "^4.8.2",
-        "react-dom": "18"
-      }
-    }
-  },
-  "keywords": [],
-  "author": "Myles Linder",
-  "license": "MIT"
+	"name": "remix-upstash-session",
+	"version": "0.0.3",
+	"description": "A super simple library to use uptash redis for remix sessions",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"require": "./dist/index.cjs",
+			"import": "./dist/index.mjs"
+		}
+	},
+	"packageManager": "pnpm@7.11.0",
+	"sideEffects": false,
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/myleslinder/remix-upstash-session"
+	},
+	"homepage": "https://github.com/myleslinder/remix-upstash-session",
+	"scripts": {
+		"build": "tsup",
+		"format": "prettier --write .",
+		"lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
+		"typecheck": "tsc -b",
+		"test": "vitest",
+		"update:check": "pnpm dlx taze",
+		"v:patch": "npm version patch",
+		"prepublishOnly": "pnpm run build"
+	},
+	"tsup": {
+		"entry": [
+			"src/index.ts"
+		],
+		"splitting": false,
+		"sourcemap": false
+	},
+	"dependencies": {
+		"@lukeed/csprng": "^1.0.1"
+	},
+	"devDependencies": {
+		"@myleslinder/eslint-config": "^0.0.31",
+		"@myleslinder/prettier-config": "^0.0.1",
+		"@remix-run/node": "^1.7.0",
+		"@remix-run/server-runtime": "*",
+		"@typescript-eslint/eslint-plugin": "^5.37.0",
+		"@typescript-eslint/parser": "^5.37.0",
+		"@upstash/redis": "*",
+		"eslint": "^8.23.1",
+		"eslint-config-prettier": "^8.5.0",
+		"prettier": "2.7.1",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"tsup": "^6.2.3",
+		"typescript": "^4.8.3",
+		"vite": "^3.1.0",
+		"vitest": "^0.22.1"
+	},
+	"peerDependencies": {
+		"@remix-run/server-runtime": "*",
+		"@upstash/redis": "*"
+	},
+	"pnpm": {
+		"peerDependencyRules": {
+			"allowedVersions": {
+				"react": "18",
+				"typescript": "^4.8.2",
+				"react-dom": "18"
+			}
+		}
+	},
+	"keywords": [],
+	"author": "Myles Linder",
+	"license": "MIT"
 }
