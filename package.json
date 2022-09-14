@@ -27,6 +27,7 @@
 		"lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
 		"typecheck": "tsc -b",
 		"test": "vitest",
+		"coverage": "vitest run --coverage",
 		"update:check": "pnpm dlx taze",
 		"v:patch": "npm version patch",
 		"prepublishOnly": "pnpm run build"
@@ -49,6 +50,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.37.0",
 		"@typescript-eslint/parser": "^5.37.0",
 		"@upstash/redis": "*",
+		"@vitest/coverage-c8": "^0.23.2",
 		"eslint": "^8.23.1",
 		"eslint-config-prettier": "^8.5.0",
 		"prettier": "2.7.1",
