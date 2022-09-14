@@ -1,16 +1,16 @@
-# Remix Upstash Session &nbsp;![](https://img.shields.io/npm/v/remix-upstash-session.svg)
+# Remix Upstash Session &nbsp;[![package-badge]][package] &nbsp;[![size-badge]][bundlephobia]
 
 A super simple library to use uptash redis for remix sessions.
 
-It's pretty much what exists in the [/examples directory](https://github.com/remix-run/remix/tree/main/examples/redis-upstash-session) and as outlined in [this upstash blog post](https://upstash.com/blog/redis-session-remix).
+It's pretty much what exists in the [/examples directory][remix-example] and as outlined in [this upstash blog post][upstash-blog].
 
 ## Differences
 
-Instead of using the upstash HTTP API directly it uses a provided [`@upstash/redis` client](https://docs.upstash.com/redis/sdks/javascriptsdk/getstarted)
+Instead of using the upstash HTTP API directly it uses a provided [`@upstash/redis` client][upstash-client]
 
-You can use this everywhere remix and @upstash/redis works because it takes in a [`createSessionStorage` function](https://remix.run/docs/en/v1/api/remix#createsessionstorage) which you can import yourself based on your server runtime (e.g. from @remix-run/node or cloudflare or deno).
+You can use this everywhere remix and @upstash/redis works because it takes in a [`createSessionStorage` function][session-storage] which you can import yourself based on your server runtime (e.g. from @remix-run/node or cloudflare or deno).
 
-It also uses [`@lukeed/csprng`](https://github.com/lukeed/csprng) to generate random bytes for use as ids so it will use the cryptographically secure generator for your runtime.
+It also uses [`@lukeed/csprng`][csprng] to generate random bytes for use as ids so it will use the cryptographically secure generator for your runtime.
 
 Offers a `saveUninitialized` option (defaults to false) that forces a session that is "uninitialized" to be saved to the store. A session is uninitialized when it is new but not modified.
 
@@ -94,3 +94,13 @@ pickUserId?: (sessionData: SessionData) => string | undefined;
 ## License
 
 MIT
+
+[remix-example]: https://github.com/remix-run/remix/tree/main/examples/redis-upstash-session
+[upstash-blog]: https://upstash.com/blog/redis-session-remix
+[upstash-client]: https://docs.upstash.com/redis/sdks/javascriptsdk/getstarted
+[session-storage]: https://remix.run/docs/en/v1/api/remix#createsessionstorage
+[csprng]: https://github.com/lukeed/csprng
+[package]: https://www.npmjs.com/package/remix-upstash-session
+[package-badge]: https://img.shields.io/npm/v/remix-upstash-session.svg
+[size-badge]: https://img.shields.io/bundlephobia/minzip/remix-upstash-session@^0.0.3
+[bundlephobia]: https://bundlephobia.com/package/remix-upstash-session@^0.0.3
