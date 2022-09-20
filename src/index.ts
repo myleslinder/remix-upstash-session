@@ -44,6 +44,14 @@ type UpstashSessionStorageOptions = {
 	keyPrefix?: string;
 
 	/**
+	 * Forces a session that is "uninitialized" to be saved to the store.
+	 * A session is uninitialized when it is new but not modified.
+	 *
+	 * @default false
+	 */
+	saveUninitialized?: boolean;
+
+	/**
 	 * If you provided a value for `getUserId` then this optoin
 	 * sets the prefix of the keys used to store the session id lists.
 	 * This should end with the key separator you normally use e.g. `:`
@@ -54,13 +62,6 @@ type UpstashSessionStorageOptions = {
 	 * @default _device:
 	 */
 	deviceKeyPrefix?: string;
-	/**
-	 * Forces a session that is "uninitialized" to be saved to the store.
-	 * A session is uninitialized when it is new but not modified.
-	 *
-	 * @default false
-	 */
-	saveUninitialized?: boolean;
 };
 
 type GetAllSessions = (userId: string) => Promise<SessionData[]>;
@@ -125,7 +126,7 @@ export function createUpstashSessionStorage(
 		},
 		async readData(id) {
 			if (typeof id !== "string") {
-				return null;
+				return {};
 			}
 			return redis.get<SessionData>(buildKey(id));
 		},
